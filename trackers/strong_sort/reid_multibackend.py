@@ -11,10 +11,10 @@ from collections import OrderedDict, namedtuple
 import gdown
 from os.path import exists as file_exists
 
-from yolov5.utils.general import LOGGER, check_version, check_requirements
-from trackers.strong_sort.deep.reid_model_factory import (show_downloadeable_models, get_model_url, get_model_name,
+from ...yolov5.utils.general import LOGGER, check_version, check_requirements
+from .deep.reid_model_factory import (show_downloadeable_models, get_model_url, get_model_name,
                                                           download_url, load_pretrained_weights)
-from trackers.strong_sort.deep.models import build_model
+from .deep.models import build_model
 
 
 def check_suffix(file='yolov5s.pt', suffix=('.pt',), msg=''):
