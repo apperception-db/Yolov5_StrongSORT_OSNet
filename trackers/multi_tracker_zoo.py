@@ -1,8 +1,8 @@
 from pathlib import Path
-from trackers.strong_sort.utils.parser import get_config
-from trackers.strong_sort.strong_sort import StrongSORT
-from trackers.ocsort.ocsort import OCSort
-from trackers.bytetrack.byte_tracker import BYTETracker
+from .strong_sort.utils.parser import get_config
+from .strong_sort.strong_sort import StrongSORT
+from .ocsort.ocsort import OCSort
+from .bytetrack.byte_tracker import BYTETracker
 
 
 FILE = Path(__file__).resolve()
