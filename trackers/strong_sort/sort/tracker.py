@@ -1,5 +1,6 @@
 # vim: expandtab:ts=4:sw=4
 from __future__ import absolute_import
+from typing import List
 import numpy as np
 from . import kalman_filter
 from . import linear_assignment
@@ -45,7 +46,7 @@ class Tracker:
         self.mc_lambda = mc_lambda
 
         self.kf = kalman_filter.KalmanFilter()
-        self.tracks = []
+        self.tracks: "List[Track]" = []
         self._next_id = 1
 
     def predict(self):
@@ -81,11 +82,11 @@ class Tracker:
         # Update track set.
         for track_idx, detection_idx in matches:
             self.tracks[track_idx].update(
-                detections[detection_idx], classes[detection_idx], confidences[detection_idx])
+                detections[detection_idx], classes[detection_idx], confidences[detection_idx], detection_idx)
         for track_idx in unmatched_tracks:
             self.tracks[track_idx].mark_missed()
         for detection_idx in unmatched_detections:
-            self._initiate_track(detections[detection_idx], classes[detection_idx].item(), confidences[detection_idx].item())
+            self._initiate_track(detections[detection_idx], classes[detection_idx].item(), confidences[detection_idx].item(), detection_idx)
         self.tracks = [t for t in self.tracks if not t.is_deleted()]
 
         # Update distance metric.
@@ -170,8 +171,8 @@ class Tracker:
         unmatched_tracks = list(set(unmatched_tracks_a + unmatched_tracks_b))
         return matches, unmatched_tracks, unmatched_detections
 
-    def _initiate_track(self, detection, class_id, conf):
+    def _initiate_track(self, detection, class_id, conf, index: "int"):
         self.tracks.append(Track(
             detection.to_xyah(), self._next_id, class_id, conf, self.n_init, self.max_age, self.ema_alpha,
-            detection.feature))
+            detection.feature, index=index))
         self._next_id += 1

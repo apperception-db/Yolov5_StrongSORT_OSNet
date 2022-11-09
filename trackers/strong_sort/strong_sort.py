@@ -73,7 +73,8 @@ class StrongSORT(object):
             track_id = track.track_id
             class_id = track.class_id
             conf = track.conf
-            outputs.append(np.array([x1, y1, x2, y2, track_id, class_id, conf]))
+            index = track.index
+            outputs.append(np.array([x1, y1, x2, y2, track_id, class_id, conf, index, track.time_since_update]))
         if len(outputs) > 0:
             outputs = np.stack(outputs, axis=0)
         return outputs

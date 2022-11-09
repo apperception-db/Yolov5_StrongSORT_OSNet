@@ -67,7 +67,8 @@ class Track:
     """
 
     def __init__(self, detection, track_id, class_id, conf, n_init, max_age, ema_alpha,
-                 feature=None):
+                 feature=None, index: "int | None" = None):
+        assert index is not None
         self.track_id = track_id
         self.class_id = int(class_id)
         self.hits = 1
@@ -81,6 +82,7 @@ class Track:
             feature /= np.linalg.norm(feature)
             self.features.append(feature)
 
+        self.index: int = index
         self.conf = conf
         self._n_init = n_init
         self._max_age = max_age
@@ -253,7 +255,7 @@ class Track:
         self.age += 1
         self.time_since_update += 1
 
-    def update(self, detection, class_id, conf):
+    def update(self, detection, class_id, conf, index: "int"):
         """Perform Kalman filter measurement update step and update the feature
         cache.
         Parameters
@@ -261,6 +263,7 @@ class Track:
         detection : Detection
             The associated detection.
         """
+        self.index = index
         self.conf = conf
         self.class_id = class_id.int()
         self.mean, self.covariance = self.kf.update(self.mean, self.covariance, detection.to_xyah(), detection.confidence)
