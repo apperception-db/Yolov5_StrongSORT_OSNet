@@ -10,7 +10,7 @@ from ...yolov5.utils.general import xywh2xyxy, xyxy2xywh
 
 
 from .kalman_filter import KalmanFilter
-from trackers.bytetrack import matching
+from . import matching
 from .basetrack import BaseTrack, TrackState
 
 class STrack(BaseTrack):
