@@ -220,24 +220,27 @@ class Track:
         else:
             return eye
 
-    def camera_update(self, previous_frame, next_frame, cached_matrix=None):
-        warp_matrix, src_aligned = self.ECC(previous_frame, next_frame)
-        if warp_matrix is None and src_aligned is None:
-            return
-        [a,b] = warp_matrix
-        warp_matrix=np.array([a,b,[0,0,1]])
-        warp_matrix = warp_matrix.tolist()
-        if cached_matrix is None:
+    def camera_update(self, previous_frame, next_frame, cached_matrix=(False, None)):
+        is_cached, matrix = cached_matrix
+
+        if not is_cached:
+            warp_matrix, src_aligned = self.ECC(previous_frame, next_frame)
+            if warp_matrix is None and src_aligned is None:
+                return True, None
+            [a,b] = warp_matrix
+            warp_matrix=np.array([a,b,[0,0,1]])
+            warp_matrix = warp_matrix.tolist()
             matrix = self.get_matrix(warp_matrix)
-        else:
-            matrix = self.cached_matrix
+        elif matrix is None:
+            return True, None
+
         x1, y1, x2, y2 = self.to_tlbr()
         x1_, y1_, _ = matrix @ np.array([x1, y1, 1]).T
         x2_, y2_, _ = matrix @ np.array([x2, y2, 1]).T
         w, h = x2_ - x1_, y2_ - y1_
         cx, cy = x1_ + w / 2, y1_ + h / 2
         self.mean[:4] = [cx, cy, w / h, h]
-        return matrix
+        return True, matrix
 
 
     def increment_age(self):

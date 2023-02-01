@@ -63,13 +63,12 @@ class Tracker:
             track.mark_missed()
 
     def camera_update(self, previous_img, current_img, cache=False):
-        cached_matrix = None
+        cached_matrix = (False, None)
         for track in self.tracks:
             if cache:
-                if cached_matrix is None:
-                    cached_matrix = track.camera_update(previous_img, current_img, cached_matrix)
+                cached_matrix = track.camera_update(previous_img, current_img, cached_matrix)
             else:
-                track.camera_update(previous_img, current_img, cached_matrix)
+                track.camera_update(previous_img, current_img)
 
     def update(self, detections, classes, confidences):
         """Perform measurement update and track management.
