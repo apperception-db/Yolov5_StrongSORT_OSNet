@@ -1,7 +1,7 @@
 # pip install -r requirements.txt
 
 # base ----------------------------------------
-matplotlib>=3.2.2
+# matplotlib>=3.2.2
 numpy>=1.18.5
 opencv-python>=4.1.1
 Pillow>=7.1.2
@@ -10,13 +10,13 @@ requests>=2.23.0
 scipy>=1.4.1
 torch>=1.7.0
 torchvision>=0.8.1
-tqdm>=4.64.0
+# tqdm>=4.64.0
 protobuf<=3.20.1
 
 # plotting ------------------------------------
 
-pandas>=1.1.4
-seaborn>=0.11.0
+# pandas>=1.1.4
+# seaborn>=0.11.0
 
 # deep_sort -----------------------------------
 easydict
@@ -30,9 +30,9 @@ tb-nightly
 future
 yacs
 gdown
-flake8
-yapf
-isort==4.3.21
+# flake8
+# yapf
+# isort==4.3.21
 imageio
 
 #bytetrack
@@ -43,7 +43,7 @@ git+https://github.com/samson-wang/cython_bbox.git@9badb346a9222c98f828ba45c63fe
 filterpy
 
 # Tracking eval ----------------------------------
-GitPython
+# GitPython
 
 # Export --------------------------------------
 #onnx>=1.9.0  # ONNX export
