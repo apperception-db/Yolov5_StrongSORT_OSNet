@@ -202,14 +202,15 @@ def load_pretrained_weights(model, weight_path):
             '(** ignored and continue **)'.format(weight_path)
         )
     else:
-        print(
-            'Successfully loaded pretrained weights from "{}"'.
-            format(weight_path)
-        )
+        # print(
+        #     'Successfully loaded pretrained weights from "{}"'.
+        #     format(weight_path)
+        # )
         if len(discarded_layers) > 0:
-            print(
-                '** The following layers are discarded '
-                'due to unmatched keys or layer size: {}'.
-                format(discarded_layers)
-            )
+            pass
+            # print(
+            #     '** The following layers are discarded '
+            #     'due to unmatched keys or layer size: {}'.
+            #     format(discarded_layers)
+            # )
 

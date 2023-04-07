@@ -62,9 +62,13 @@ class Tracker:
             track.increment_age()
             track.mark_missed()
 
-    def camera_update(self, previous_img, current_img):
+    def camera_update(self, previous_img, current_img, cache=False):
+        cached_matrix = (False, None)
         for track in self.tracks:
-            track.camera_update(previous_img, current_img)
+            if cache:
+                cached_matrix = track.camera_update(previous_img, current_img, cached_matrix)
+            else:
+                track.camera_update(previous_img, current_img)
 
     def update(self, detections, classes, confidences):
         """Perform measurement update and track management.
@@ -88,6 +92,7 @@ class Tracker:
         for detection_idx in unmatched_detections:
             self._initiate_track(detections[detection_idx], classes[detection_idx].item(), confidences[detection_idx].item(), detection_idx)
         self.tracks = [t for t in self.tracks if not t.is_deleted()]
+        # self.tracks = self.tracks[:2] if len(self.tracks) > 2 else self.tracks
 
         # Update distance metric.
         active_targets = [t.track_id for t in self.tracks if t.is_confirmed()]
