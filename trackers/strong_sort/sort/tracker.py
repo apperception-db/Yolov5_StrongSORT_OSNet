@@ -6,7 +6,7 @@ from . import kalman_filter
 from . import linear_assignment
 from . import iou_matching
 from .track import Track
-import time
+
 
 class Tracker:
     """

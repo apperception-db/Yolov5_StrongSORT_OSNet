@@ -1,5 +1,3 @@
-import time
-
 import numpy as np
 import torch
 import sys
@@ -39,7 +37,7 @@ class StrongSORT(object):
             metric, max_iou_distance=max_iou_distance, max_age=max_age, n_init=n_init)
 
     def update(self, dets,  ori_img):
-        start_time = time.time()
+        
         xyxys = dets[:, 0:4]
         confs = dets[:, 4]
         clss = dets[:, 5]
@@ -61,9 +59,7 @@ class StrongSORT(object):
 
         # update tracker
         self.tracker.predict()
-        predict_time = time.time()
         self.tracker.update(detections, clss, confs)
-        update_time = time.time()
 
         # output bbox identities
         outputs = []
@@ -81,7 +77,7 @@ class StrongSORT(object):
             outputs.append(np.array([x1, y1, x2, y2, track_id, class_id, conf, index, track.time_since_update]))
         if len(outputs) > 0:
             outputs = np.stack(outputs, axis=0)
-        return outputs  # , predict_time-start_time, update_time-predict_time
+        return outputs
 
     """
     TODO:
