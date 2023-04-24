@@ -235,6 +235,6 @@ class ReIDDetectMultiBackend(nn.Module):
         # Warmup model by running inference once
         warmup_types = self.pt, self.jit, self.onnx, self.engine, self.saved_model, self.pb
         if any(warmup_types) and self.device.type != 'cpu':
-            im = [np.empty(*imgsz).astype(np.uint8)]  # input
+            im = [np.empty(*imgsz, dtype=np.uint8)]  # input
             for _ in range(2 if self.jit else 1):  #
                 self.forward(im)  # warmup
