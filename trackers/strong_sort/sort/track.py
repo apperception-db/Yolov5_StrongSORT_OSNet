@@ -67,10 +67,10 @@ class Track:
     """
 
     def __init__(self, detection, track_id, class_id, conf, n_init, max_age, ema_alpha,
-                 feature=None, index: "int | None" = None):
-        assert index is not None
+                 feature=None, detection_id = None):
         self.track_id = track_id
         self.class_id = int(class_id)
+        self.class_ids = [self.class_id]
         self.hits = 1
         self.age = 1
         self.time_since_update = 0
@@ -82,8 +82,9 @@ class Track:
             feature /= np.linalg.norm(feature)
             self.features.append(feature)
 
-        self.index: int = index
+        self.detection_ids = [] if detection_id is None else [detection_id]
         self.conf = conf
+        self.confs = [conf]
         self._n_init = n_init
         self._max_age = max_age
 
@@ -193,6 +194,11 @@ class Track:
             (cc, warp_matrix) = cv2.findTransformECC (src_r, dst_r, warp_matrix, warp_mode, criteria, None, 1)
         except cv2.error as e:
             print('ecc transform failed')
+            # import datetime
+            # t = str(datetime.datetime.now())
+            # h = str(hash(tuple(src_r.flatten().tolist()))) + '-' + str(hash(tuple(dst_r.flatten().tolist())))
+            # cv2.imwrite(f'./{t}--{h}--src.jpg', src_r)
+            # cv2.imwrite(f'./{t}--{h}--dst.jpg', dst_r)
             return None, None
         
         if scale is not None:
@@ -255,7 +261,7 @@ class Track:
         self.age += 1
         self.time_since_update += 1
 
-    def update(self, detection, class_id, conf, index: "int"):
+    def update(self, detection, class_id, conf):
         """Perform Kalman filter measurement update step and update the feature
         cache.
         Parameters
@@ -263,9 +269,11 @@ class Track:
         detection : Detection
             The associated detection.
         """
-        self.index = index
+        self.detection_ids.append(detection.id)
         self.conf = conf
+        self.confs.append(conf)
         self.class_id = class_id.int()
+        self.class_ids.append(self.class_id)
         self.mean, self.covariance = self.kf.update(self.mean, self.covariance, detection.to_xyah(), detection.confidence)
 
         feature = detection.feature / np.linalg.norm(detection.feature)

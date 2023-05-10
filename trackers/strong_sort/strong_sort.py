@@ -36,7 +36,7 @@ class StrongSORT(object):
         self.tracker = Tracker(
             metric, max_iou_distance=max_iou_distance, max_age=max_age, n_init=n_init)
 
-    def update(self, dets,  ori_img):
+    def update(self, dets, ids: "list",  ori_img):
         
         xyxys = dets[:, 0:4]
         confs = dets[:, 4]
@@ -50,7 +50,7 @@ class StrongSORT(object):
         # generate detections
         features = self._get_features(xywhs, ori_img)
         bbox_tlwh = self._xywh_to_tlwh(xywhs)
-        detections = [Detection(bbox_tlwh[i], conf, features[i]) for i, conf in enumerate(
+        detections = [Detection(bbox_tlwh[i], conf, features[i], ids[i]) for i, conf in enumerate(
             confs)]
 
         # run on non-maximum supression
@@ -73,8 +73,7 @@ class StrongSORT(object):
             track_id = track.track_id
             class_id = track.class_id
             conf = track.conf
-            index = track.index
-            outputs.append(np.array([x1, y1, x2, y2, track_id, class_id, int(conf * 10000), index, track.time_since_update], dtype=np.int32))
+            outputs.append(np.array([x1, y1, x2, y2, track_id, class_id, int(conf * 10000)], dtype=np.int32))
         # if len(outputs) > 0:
         #     outputs = np.stack(outputs, axis=0)
         return outputs
