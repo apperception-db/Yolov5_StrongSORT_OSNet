@@ -3,7 +3,6 @@ import torch
 from pathlib import Path
 import numpy as np
 from itertools import islice
-import torchvision.transforms as transforms
 import cv2
 import sys
 import torchvision.transforms as T
