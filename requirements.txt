@@ -36,8 +36,8 @@ gdown
 imageio
 
 #bytetrack
-lap
-git+https://github.com/apperception-db/cython_bbox.git
+# lap
+# git+https://github.com/apperception-db/cython_bbox.git
 
 # ocsort
 filterpy
